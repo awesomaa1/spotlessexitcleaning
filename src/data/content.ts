@@ -37,9 +37,9 @@ export const services: Service[] = [
       "Kitchens & bathrooms",
       "Floors, surfaces & dusting",
     ],
-    image: "/images/house-kitchen.jpg",
+    image: "/assets/service pics/house cleaning2 .jpeg",
     imageAlt:
-      "A sunlit kitchen with a timber island, open shelving and tiled splashback",
+      "Spotless cleaner vacuuming living room rug beside fluted wood paneling and coffee table",
   },
   {
     id: "airbnb",
@@ -53,9 +53,9 @@ export const services: Service[] = [
       "Linen change & restocking",
       "Presentation checks",
     ],
-    image: "/images/airbnb-bedroom.jpg",
+    image: "/assets/service pics/airbnb.jpeg",
     imageAlt:
-      "A freshly made bed with white linen beside a timber bedside table",
+      "Spotless team member in uniform preparing and dressing a luxury king bed for guests",
   },
   {
     id: "linen",
@@ -69,8 +69,9 @@ export const services: Service[] = [
       "Pressed and folded",
       "Curtains & soft furnishings",
     ],
-    image: "/images/linen-shelf.jpg",
-    imageAlt: "Neatly folded linen tea towels stacked on a timber shelf",
+    image: "/assets/service pics/linen.jpeg",
+    imageAlt:
+      "Spotless professional folding fresh hotel-grade white towels on a styled linen bed",
   },
   {
     id: "lease",
@@ -84,9 +85,9 @@ export const services: Service[] = [
       "Inside cupboards & appliances",
       "Windows, skirting & tracks",
     ],
-    image: "/images/end-of-lease-room.jpg",
+    image: "/assets/service pics/end of lease.jpeg",
     imageAlt:
-      "An empty, bright room with polished timber floors and tall windows",
+      "Spotless cleaning crew detailing kitchen cupboards and vacuuming wooden floors for final lease handover",
   },
 ]
 
