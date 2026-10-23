@@ -1,0 +1,131 @@
+@import 'tailwindcss';
+
+/* Exact faces from the Figma hero, declared under their composite cssFamily names */
+@font-face {
+  font-family: "Geist:Regular";
+  src: url("https://static.figma.com/font/Geist_wght__1") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist:Medium";
+  src: url("https://static.figma.com/font/Geist_wght__1") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist:SemiBold";
+  src: url("https://static.figma.com/font/Geist_wght__1") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist:Bold";
+  src: url("https://static.figma.com/font/Geist_wght__1") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter:Regular";
+  src: url("https://static.figma.com/font/Inter_1") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Kaushan Script:Regular";
+  src: url("https://static.figma.com/font/KaushanScript-Regular_1") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lato:Regular";
+  src: url("https://static.figma.com/font/Lato-Regular_1") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@theme {
+  /* Palette derived from the hero frame */
+  --color-ink: #0d2a31;
+  --color-teal: #123f4a;
+  --color-turquoise: #5fc9c2;
+  --color-turquoise-bright: #71eee6;
+  --color-turquoise-glow: #7cfff6;
+  --color-teal-text: #1a7a73;
+  --color-sand: #f4f1ec;
+  --color-sand-deep: #ebe6de;
+  --color-muted: #56676b;
+  --color-nav-muted: #b3b3b3;
+  --color-headline: #efefef;
+}
+
+/* Each utility pairs a composite family with its matching weight descriptor */
+@utility ff-geist {
+  font-family: "Geist:Regular", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+}
+@utility ff-geist-medium {
+  font-family: "Geist:Medium", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+}
+@utility ff-geist-semibold {
+  font-family: "Geist:SemiBold", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+}
+@utility ff-geist-bold {
+  font-family: "Geist:Bold", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+}
+@utility ff-script {
+  font-family: "Kaushan Script:Regular", cursive;
+  font-weight: 400;
+}
+@utility ff-lato {
+  font-family: "Lato:Regular", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+}
+@utility ff-inter {
+  font-family: "Inter:Regular", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
+  }
+  body {
+    font-family: "Geist:Regular", ui-sans-serif, system-ui, sans-serif;
+    color: var(--color-ink);
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--color-turquoise-bright);
+    color: var(--color-teal);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-turquoise);
+    outline-offset: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
