@@ -820,6 +820,7 @@ export default function QuoteForm({
       address: f.address,
       frequency: service === "house" ? f.frequency : "",
       extras: service === "lease" ? f.leaseExtras.join(", ") : "",
+      linenItems: service === "linen" ? f.linenItems.join(", ") : "",
       moveOutDate: service === "lease" ? f.moveOutDate : "",
       preferredDate: f.preferredDate,
       name: f.name,
