@@ -158,6 +158,7 @@ type FormState = {
   bathrooms: string
   suburb: string
   name: string
+  address: string
   email: string
   phone: string
   contactMethod: string
@@ -180,6 +181,7 @@ const initial: FormState = {
   bathrooms: "1",
   suburb: "",
   name: "",
+  address: "",
   email: "",
   phone: "",
   contactMethod: "Phone",
@@ -187,7 +189,7 @@ const initial: FormState = {
   preferredDate: "",
 }
 
-type Errors = Partial<Record<"service" | "suburb" | "name" | "email" | "phone" | "linenItems", string>>
+type Errors = Partial<Record<"service" | "suburb" | "name" | "address" | "email" | "phone" | "linenItems", string>>
 
 /* ─────────────────────────────────────────────────────────────────────────────
    FIELD PRIMITIVES
@@ -571,6 +573,26 @@ function BookingStep({
           </Field>
         </div>
 
+        <div data-field="address">
+          <Field
+            label="Full property address"
+            required
+            error={errors.address}
+            htmlFor={fid("address")}
+          >
+            <input
+              id={fid("address")}
+              value={f.address}
+              onChange={(e) => set("address", e.target.value)}
+              autoComplete="street-address"
+              placeholder="e.g. 12 Collins St, Melbourne VIC 3000"
+              aria-invalid={!!errors.address}
+              aria-describedby={errors.address ? `${fid("address")}-error` : undefined}
+              className={inputBase}
+            />
+          </Field>
+        </div>
+
         <div className="grid gap-5 sm:grid-cols-2">
           <div data-field="email">
             <Field label="Email" required error={errors.email} htmlFor={fid("email")}>
@@ -733,6 +755,7 @@ export default function QuoteForm({
   function validateBookingStep(): Errors {
     const e: Errors = {}
     if (!f.name.trim()) e.name = "Enter your name."
+    if (!f.address.trim()) e.address = "Enter the full property address."
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email.trim()))
       e.email = "Enter a valid email address."
     if (f.phone.replace(/\D/g, "").length < 8)
@@ -811,6 +834,7 @@ export default function QuoteForm({
             `BEDROOMS:      ${service !== "linen" ? f.bedrooms : "N/A"}`,
             `BATHROOMS:     ${service !== "linen" ? f.bathrooms : "N/A"}`,
             `SUBURB:        ${f.suburb}`,
+            `ADDRESS:       ${f.address}`,
             ``,
             service === "house" ? `FREQUENCY:     ${f.frequency}` : "",
             service === "lease" && f.leaseExtras.length > 0
