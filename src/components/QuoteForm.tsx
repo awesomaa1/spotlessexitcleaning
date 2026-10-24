@@ -871,13 +871,15 @@ export default function QuoteForm({
       }).catch((err) => console.error("Web3Forms error:", err)),
 
       // 2️⃣  Log to Google Sheet via Apps Script
-      //     ⚠️  Replace "YOUR_APPS_SCRIPT_URL" with your deployed Web App URL
-      //     Setup instructions: see google-apps-script.js in the project root
-      fetch("YOUR_APPS_SCRIPT_URL", {
-        method: "POST",
-        headers: { "Content-Type": "text/plain" },
-        body: JSON.stringify(sheetPayload),
-      }).catch((err) => console.error("Sheets logging error:", err)),
+      fetch(
+        "https://script.google.com/macros/s/AKfycbwzhCPnRPN_vmiF-YkloDsww5CE2pZKpDpdQrO_Jp7Ub-Ky7dNIqyz8MiXNEmBnnp4b/exec",
+        {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(sheetPayload),
+        }
+      ).catch((err) => console.error("Sheets logging error:", err)),
 
     ])
 
