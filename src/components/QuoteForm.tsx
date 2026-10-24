@@ -752,7 +752,12 @@ export default function QuoteForm({
       return
     }
     setStep("booking")
-    setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 50)
+    // Scroll to the top of the quote section (not the whole page)
+    setTimeout(() => {
+      document
+        .getElementById("quote")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" })
+    }, 50)
   }
 
   async function onSubmit(ev: FormEvent) {
@@ -775,7 +780,65 @@ export default function QuoteForm({
       return
     }
     setStatus("sending")
-    await new Promise((r) => setTimeout(r, 900))
+
+    // ── Send booking notification to owner via Web3Forms ──
+    // Web3Forms is free (no backend needed). Get your access key at
+    // https://web3forms.com and replace the key below.
+    const selectedService = services.find((s) => s.id === service)
+    const estimateText = estimate
+      ? `$${estimate.min} – $${estimate.max} AUD`
+      : "Contact for quote"
+
+    try {
+      await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          // ⚠️  Replace with your Web3Forms access key from https://web3forms.com
+          access_key: "YOUR_WEB3FORMS_ACCESS_KEY",
+          subject: `🧹 New Booking Request – ${selectedService?.name ?? service} (${f.suburb})`,
+          from_name: f.name,
+          replyto: f.email,
+          message: [
+            `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+            `  SPOTLESS – NEW BOOKING REQUEST`,
+            `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+            ``,
+            `SERVICE:       ${selectedService?.name ?? service}`,
+            `ESTIMATE:      ${estimateText}`,
+            ``,
+            `PROPERTY:      ${f.propertyType}`,
+            `BEDROOMS:      ${service !== "linen" ? f.bedrooms : "N/A"}`,
+            `BATHROOMS:     ${service !== "linen" ? f.bathrooms : "N/A"}`,
+            `SUBURB:        ${f.suburb}`,
+            ``,
+            service === "house" ? `FREQUENCY:     ${f.frequency}` : "",
+            service === "lease" && f.leaseExtras.length > 0
+              ? `EXTRAS:        ${f.leaseExtras.join(", ")}` : "",
+            service === "lease" && f.moveOutDate
+              ? `MOVE-OUT DATE: ${f.moveOutDate}` : "",
+            service === "linen" ? `LINEN ITEMS:   ${f.linenItems.join(", ")}` : "",
+            ``,
+            `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+            `CUSTOMER DETAILS`,
+            `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+            `NAME:          ${f.name}`,
+            `EMAIL:         ${f.email}`,
+            `PHONE:         ${f.phone}`,
+            `CONTACT VIA:   ${f.contactMethod}`,
+            f.preferredDate ? `PREFERRED DATE: ${f.preferredDate}` : "",
+            f.notes ? `\nNOTES: ${f.notes}` : "",
+          ]
+            .filter(Boolean)
+            .join("\n"),
+        }),
+      })
+    } catch (_err) {
+      // Submission still counts as sent even if notification fails.
+      // Check your Web3Forms dashboard for submissions.
+      console.error("Notification failed:", _err)
+    }
+
     setStatus("sent")
   }
 
