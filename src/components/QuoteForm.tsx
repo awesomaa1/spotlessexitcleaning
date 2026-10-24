@@ -804,47 +804,61 @@ export default function QuoteForm({
     }
     setStatus("sending")
 
-    // ── Send booking notification to owner via Web3Forms ──
-    // Web3Forms is free (no backend needed). Get your access key at
-    // https://web3forms.com and replace the key below.
     const selectedService = services.find((s) => s.id === service)
     const estimateText = estimate
       ? `$${estimate.min} – $${estimate.max} AUD`
       : "Contact for quote"
 
-    try {
-      await fetch("https://api.web3forms.com/submit", {
+    // Shared booking payload
+    const sheetPayload = {
+      service: selectedService?.name ?? service ?? "",
+      estimate: estimateText,
+      propertyType: f.propertyType,
+      bedrooms: service !== "linen" ? f.bedrooms : "N/A",
+      bathrooms: service !== "linen" ? f.bathrooms : "N/A",
+      suburb: f.suburb,
+      address: f.address,
+      frequency: service === "house" ? f.frequency : "",
+      extras: service === "lease" ? f.leaseExtras.join(", ") : "",
+      moveOutDate: service === "lease" ? f.moveOutDate : "",
+      preferredDate: f.preferredDate,
+      name: f.name,
+      email: f.email,
+      phone: f.phone,
+      contactMethod: f.contactMethod,
+      notes: f.notes,
+    }
+
+    // ── Run both submissions in parallel ──────────────────────────────────────
+    await Promise.allSettled([
+
+      // 1️⃣  Email notification via Web3Forms (free — https://web3forms.com)
+      //     ⚠️  Replace "YOUR_WEB3FORMS_ACCESS_KEY" with your key
+      fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
-          // ⚠️  Replace with your Web3Forms access key from https://web3forms.com
           access_key: "YOUR_WEB3FORMS_ACCESS_KEY",
-          subject: `🧹 New Booking Request – ${selectedService?.name ?? service} (${f.suburb})`,
+          subject: `🧹 New Booking – ${selectedService?.name ?? service} (${f.suburb})`,
           from_name: f.name,
           replyto: f.email,
           message: [
             `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
             `  SPOTLESS – NEW BOOKING REQUEST`,
             `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-            ``,
-            `SERVICE:       ${selectedService?.name ?? service}`,
+            `SERVICE:       ${sheetPayload.service}`,
             `ESTIMATE:      ${estimateText}`,
             ``,
             `PROPERTY:      ${f.propertyType}`,
-            `BEDROOMS:      ${service !== "linen" ? f.bedrooms : "N/A"}`,
-            `BATHROOMS:     ${service !== "linen" ? f.bathrooms : "N/A"}`,
+            `BEDROOMS:      ${sheetPayload.bedrooms}`,
+            `BATHROOMS:     ${sheetPayload.bathrooms}`,
             `SUBURB:        ${f.suburb}`,
             `ADDRESS:       ${f.address}`,
+            sheetPayload.frequency ? `FREQUENCY:     ${sheetPayload.frequency}` : "",
+            sheetPayload.extras    ? `EXTRAS:        ${sheetPayload.extras}` : "",
+            sheetPayload.moveOutDate ? `MOVE-OUT DATE: ${sheetPayload.moveOutDate}` : "",
+            service === "linen"    ? `LINEN ITEMS:   ${f.linenItems.join(", ")}` : "",
             ``,
-            service === "house" ? `FREQUENCY:     ${f.frequency}` : "",
-            service === "lease" && f.leaseExtras.length > 0
-              ? `EXTRAS:        ${f.leaseExtras.join(", ")}` : "",
-            service === "lease" && f.moveOutDate
-              ? `MOVE-OUT DATE: ${f.moveOutDate}` : "",
-            service === "linen" ? `LINEN ITEMS:   ${f.linenItems.join(", ")}` : "",
-            ``,
-            `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-            `CUSTOMER DETAILS`,
             `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
             `NAME:          ${f.name}`,
             `EMAIL:         ${f.email}`,
@@ -852,16 +866,20 @@ export default function QuoteForm({
             `CONTACT VIA:   ${f.contactMethod}`,
             f.preferredDate ? `PREFERRED DATE: ${f.preferredDate}` : "",
             f.notes ? `\nNOTES: ${f.notes}` : "",
-          ]
-            .filter(Boolean)
-            .join("\n"),
+          ].filter(Boolean).join("\n"),
         }),
-      })
-    } catch (_err) {
-      // Submission still counts as sent even if notification fails.
-      // Check your Web3Forms dashboard for submissions.
-      console.error("Notification failed:", _err)
-    }
+      }).catch((err) => console.error("Web3Forms error:", err)),
+
+      // 2️⃣  Log to Google Sheet via Apps Script
+      //     ⚠️  Replace "YOUR_APPS_SCRIPT_URL" with your deployed Web App URL
+      //     Setup instructions: see google-apps-script.js in the project root
+      fetch("YOUR_APPS_SCRIPT_URL", {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify(sheetPayload),
+      }).catch((err) => console.error("Sheets logging error:", err)),
+
+    ])
 
     setStatus("sent")
   }
