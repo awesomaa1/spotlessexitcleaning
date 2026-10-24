@@ -24,15 +24,14 @@
 //  (The URL stays the exact same!)
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHEET_NAME = "Bookings"
-
 function doPost(e) {
   try {
+    const sheetName = "Bookings"
     const data = JSON.parse(e.postData.contents)
     const ss = SpreadsheetApp.getActiveSpreadsheet()
-    let sheet = ss.getSheetByName(SHEET_NAME)
+    let sheet = ss.getSheetByName(sheetName)
     if (!sheet) {
-      sheet = ss.insertSheet(SHEET_NAME)
+      sheet = ss.insertSheet(sheetName)
     }
 
     const now = new Date()
