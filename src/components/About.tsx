@@ -25,7 +25,7 @@ export default function About() {
         >
           <figure className="relative lg:col-span-5">
             <img
-              src="/images/detail-linen.jpg"
+              src="/assets/about.jpeg"
               alt="Crisp white linen catching soft afternoon light on a freshly made bed"
               loading="lazy"
               className="aspect-[4/5] w-full rounded-[28px] object-cover sm:aspect-[5/6] lg:aspect-[4/5.2] lg:rounded-[32px]"
