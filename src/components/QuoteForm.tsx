@@ -60,13 +60,18 @@ const housePrices: Record<string, PriceRange> = {
   "5+": { min: 200, max: 270 },
 }
 
-/** Lease-clean add-ons: extra cost each */
-const leaseAddonPrices: Record<string, number> = {
+/** Optional additional cleaning services & pricing */
+const additionalServicePrices: Record<string, number> = {
   "Carpet steam clean": 80,
   "Oven deep clean": 55,
+  "Inside fridge & freezer": 25,
   "Window tracks & screens": 40,
   "Wall spot cleaning": 35,
+  "Inside cupboards & cabinets": 35,
+  "Balcony / patio clean": 30,
 }
+
+const leaseAddonPrices = additionalServicePrices
 
 /** Linen-service prices per item type */
 const linenItemPrices: Record<string, number> = {
@@ -90,18 +95,29 @@ function computeEstimate(
 ): PriceRange | null {
   if (!service) return null
 
+  // Calculate add-on total from chosen additional services
+  const addonTotal = (f.additionalServices ?? []).reduce(
+    (acc, extra) => acc + (additionalServicePrices[extra] ?? 0),
+    0,
+  )
+
   if (service === "house") {
     const base = housePrices[f.bedrooms] ?? null
     if (!base) return null
     const disc = frequencyDiscount[f.frequency] ?? 0
     return {
-      min: Math.round(base.min * (1 - disc)),
-      max: Math.round(base.max * (1 - disc)),
+      min: Math.round(base.min * (1 - disc)) + addonTotal,
+      max: Math.round(base.max * (1 - disc)) + addonTotal,
     }
   }
 
   if (service === "airbnb") {
-    return airbnbPrices[f.bedrooms] ?? null
+    const base = airbnbPrices[f.bedrooms] ?? null
+    if (!base) return null
+    return {
+      min: base.min + addonTotal,
+      max: base.max + addonTotal,
+    }
   }
 
   if (service === "lease") {
@@ -110,10 +126,6 @@ function computeEstimate(
     const key = `${beds}_${baths}`
     const base = leasePrices[key] ?? leasePrices[`${beds}_1`] ?? null
     if (!base) return null
-    const addonTotal = f.leaseExtras.reduce(
-      (acc, extra) => acc + (leaseAddonPrices[extra] ?? 0),
-      0,
-    )
     return {
       min: base.min + addonTotal,
       max: base.max + addonTotal,
@@ -133,7 +145,10 @@ function computeEstimate(
     }
     const mult = volumeMultiplier[f.linenVolume] ?? 1
     const base = Math.round(total * mult)
-    return { min: Math.round(base * 0.9), max: Math.round(base * 1.15) }
+    return {
+      min: Math.round(base * 0.9) + addonTotal,
+      max: Math.round(base * 1.15) + addonTotal,
+    }
   }
 
   return null
@@ -153,6 +168,8 @@ type FormState = {
   linenCollection: string
   moveOutDate: string
   leaseExtras: string[]
+  additionalServices: string[]
+  customAdditionalService: string
   propertyType: string
   bedrooms: string
   bathrooms: string
@@ -176,6 +193,8 @@ const initial: FormState = {
   linenCollection: "Pick-up & delivery",
   moveOutDate: "",
   leaseExtras: [],
+  additionalServices: [],
+  customAdditionalService: "",
   propertyType: "House",
   bedrooms: "2",
   bathrooms: "1",
@@ -539,6 +558,23 @@ function BookingStep({
             <p className="ff-geist mt-1 text-[12px] text-white/50">
               Prices may vary by property condition
             </p>
+            {f.additionalServices.length > 0 && (
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {f.additionalServices.map((addon) => (
+                  <span
+                    key={addon}
+                    className="ff-geist rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-medium text-turquoise-glow"
+                  >
+                    + {addon}
+                  </span>
+                ))}
+                {f.customAdditionalService.trim() && (
+                  <span className="ff-geist rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-medium text-turquoise-glow">
+                    + {f.customAdditionalService.trim()}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
           <div className="mt-4 flex flex-wrap gap-2">
             {["No hidden fees", "Free cancellation (24hrs)", "Insured cleaners"].map(
@@ -720,7 +756,10 @@ export default function QuoteForm({
 
   const set = <K extends keyof FormState>(k: K, v: FormState[K]) =>
     setF((prev) => ({ ...prev, [k]: v }))
-  const toggle = (k: "linenItems" | "leaseExtras", v: string) =>
+  const toggle = (
+    k: "linenItems" | "leaseExtras" | "additionalServices",
+    v: string,
+  ) =>
     setF((prev) => ({
       ...prev,
       [k]: prev[k].includes(v)
@@ -809,6 +848,15 @@ export default function QuoteForm({
       ? `$${estimate.min} – $${estimate.max} AUD`
       : "Contact for quote"
 
+    const allExtras = [
+      ...f.additionalServices,
+      ...f.leaseExtras,
+      f.customAdditionalService.trim()
+        ? `Custom: ${f.customAdditionalService.trim()}`
+        : "",
+    ].filter(Boolean)
+    const uniqueExtras = Array.from(new Set(allExtras)).join(", ")
+
     // Shared booking payload
     const sheetPayload = {
       service: selectedService?.name ?? service ?? "",
@@ -819,7 +867,7 @@ export default function QuoteForm({
       suburb: f.suburb,
       address: f.address,
       frequency: service === "house" ? f.frequency : "",
-      extras: service === "lease" ? f.leaseExtras.join(", ") : "",
+      extras: uniqueExtras,
       linenItems: service === "linen" ? f.linenItems.join(", ") : "",
       moveOutDate: service === "lease" ? f.moveOutDate : "",
       preferredDate: f.preferredDate,
@@ -1252,54 +1300,22 @@ export default function QuoteForm({
                             )}
 
                             {service === "lease" && (
-                              <>
-                                <Field
-                                  label="Move-out or inspection date"
-                                  hint="Optional"
-                                  htmlFor={fid("moveOut")}
-                                  className="sm:max-w-[320px]"
-                                >
-                                  <input
-                                    id={fid("moveOut")}
-                                    type="date"
-                                    value={f.moveOutDate}
-                                    onChange={(e) =>
-                                      set("moveOutDate", e.target.value)
-                                    }
-                                    className={inputBase}
-                                  />
-                                </Field>
-                                <CheckChips
-                                  id={fid("leaseExtras")}
-                                  legend="Any extras?"
-                                  options={[
-                                    "Carpet steam clean",
-                                    "Oven deep clean",
-                                    "Window tracks & screens",
-                                    "Wall spot cleaning",
-                                  ]}
-                                  values={f.leaseExtras}
-                                  onToggle={(v) => toggle("leaseExtras", v)}
+                              <Field
+                                label="Move-out or inspection date"
+                                hint="Optional"
+                                htmlFor={fid("moveOut")}
+                                className="sm:max-w-[320px]"
+                              >
+                                <input
+                                  id={fid("moveOut")}
+                                  type="date"
+                                  value={f.moveOutDate}
+                                  onChange={(e) =>
+                                    set("moveOutDate", e.target.value)
+                                  }
+                                  className={inputBase}
                                 />
-                                {f.leaseExtras.length > 0 && (
-                                  <div className="rounded-[12px] bg-white/80 p-4 text-[13px]">
-                                    <p className="ff-geist-medium mb-2 text-ink">
-                                      Add-on costs:
-                                    </p>
-                                    {f.leaseExtras.map((extra) => (
-                                      <div
-                                        key={extra}
-                                        className="ff-geist flex justify-between py-0.5 text-muted"
-                                      >
-                                        <span>{extra}</span>
-                                        <span className="ff-geist-medium text-teal">
-                                          +${leaseAddonPrices[extra]}
-                                        </span>
-                                      </div>
-                                    ))}
-                                  </div>
-                                )}
-                              </>
+                              </Field>
                             )}
                           </div>
                         )}
@@ -1384,6 +1400,69 @@ export default function QuoteForm({
                                 className={inputBase}
                               />
                             </Field>
+                          </div>
+
+                          {/* Additional services (Optional) */}
+                          <div className="pt-4 border-t border-teal/10">
+                            <div className="mb-2 flex items-baseline justify-between">
+                              <span className="ff-geist-medium text-[14px] text-ink">
+                                Additional services
+                              </span>
+                              <span className="ff-geist text-[12px] text-muted">
+                                Optional
+                              </span>
+                            </div>
+                            <p className="ff-geist mb-3 text-[13px] text-muted">
+                              Select any extra services you would like included:
+                            </p>
+                            <CheckChips
+                              id={fid("additionalServices")}
+                              legend="Add-on services"
+                              options={[
+                                "Oven deep clean",
+                                "Carpet steam clean",
+                                "Inside fridge & freezer",
+                                "Window tracks & screens",
+                                "Wall spot cleaning",
+                                "Inside cupboards & cabinets",
+                                "Balcony / patio clean",
+                              ]}
+                              values={f.additionalServices}
+                              onToggle={(v) => toggle("additionalServices", v)}
+                            />
+
+                            {f.additionalServices.length > 0 && (
+                              <div className="mt-3 rounded-[14px] bg-sand/80 p-4 text-[13px]">
+                                <p className="ff-geist-medium mb-2 text-ink">
+                                  Selected add-ons:
+                                </p>
+                                <div className="space-y-1.5">
+                                  {f.additionalServices.map((extra) => (
+                                    <div
+                                      key={extra}
+                                      className="ff-geist flex justify-between text-muted"
+                                    >
+                                      <span>{extra}</span>
+                                      <span className="ff-geist-medium text-teal">
+                                        +${additionalServicePrices[extra] ?? 0} AUD
+                                      </span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            <div className="mt-3">
+                              <input
+                                id={fid("customAdditionalService")}
+                                value={f.customAdditionalService}
+                                onChange={(e) =>
+                                  set("customAdditionalService", e.target.value)
+                                }
+                                placeholder="Other specific request or add-on (optional)…"
+                                className={inputBase}
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
