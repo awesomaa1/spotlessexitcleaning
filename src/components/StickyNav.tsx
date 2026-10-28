@@ -38,7 +38,7 @@ export default function StickyNav({
             : "pointer-events-none -translate-y-4 opacity-0"
         }`}
       >
-        <div className="flex w-full max-w-[1120px] items-center justify-between gap-4 rounded-full bg-ink/85 py-2 pl-5 pr-2 shadow-[0_12px_40px_-12px_rgba(13,42,49,0.45)] backdrop-blur-xl">
+        <div className="flex w-full max-w-[1120px] items-center justify-between gap-2 rounded-full bg-ink/90 py-1.5 pl-3 pr-1.5 shadow-[0_12px_40px_-12px_rgba(13,42,49,0.45)] backdrop-blur-xl border border-white/10 sm:gap-4 sm:py-2 sm:pl-5 sm:pr-2">
           <Logo size="compact" />
           <nav aria-label="Sticky" className="hidden lg:block">
             <ul className="ff-lato flex gap-7 text-[16px]">
@@ -67,35 +67,36 @@ export default function StickyNav({
               })}
             </ul>
           </nav>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <a
               href={PHONE_HREF}
               aria-label={`Call ${PHONE_DISPLAY}`}
-              className="flex size-[40px] items-center justify-center rounded-full bg-turquoise"
+              className="flex size-[36px] sm:size-[40px] shrink-0 items-center justify-center rounded-full bg-turquoise transition-transform hover:scale-105"
             >
               <img
                 src={assets.phoneIcon}
                 alt=""
                 width={21.7778}
                 height={21.7778}
-                className="block size-[18px]"
+                className="block size-[16px] sm:size-[18px]"
               />
             </a>
             <button
               type="button"
               onClick={onQuote}
-              className="ff-geist-semibold rounded-full bg-turquoise-bright px-5 py-2 text-[15px] leading-[24px] whitespace-nowrap text-teal transition-colors hover:bg-[#8af3ec]"
+              className="ff-geist-semibold shrink-0 rounded-full bg-turquoise-bright px-3.5 py-1.5 sm:px-5 sm:py-2 text-[13px] sm:text-[15px] leading-[20px] sm:leading-[24px] whitespace-nowrap text-teal transition-colors hover:bg-[#8af3ec]"
             >
-              <span className="sm:hidden">Get a Quote</span>
+              <span className="min-[380px]:hidden">Quote</span>
+              <span className="hidden min-[380px]:inline sm:hidden">Get a Quote</span>
               <span className="hidden sm:inline">Get a Quick Quote</span>
             </button>
             <button
               type="button"
               onClick={() => setMenuOpen(true)}
               aria-label="Open menu"
-              className="flex size-[40px] items-center justify-center rounded-full bg-white/[0.14] backdrop-blur-xl border border-white/25 text-white shadow-[0_4px_16px_rgba(0,0,0,0.18)] hover:bg-white/[0.25] hover:border-white/40 transition-all lg:hidden max-[380px]:hidden"
+              className="flex size-[36px] sm:size-[40px] shrink-0 items-center justify-center rounded-full bg-white/[0.14] backdrop-blur-xl border border-white/25 text-white shadow-[0_4px_16px_rgba(0,0,0,0.18)] hover:bg-white/[0.25] hover:border-white/40 transition-all lg:hidden"
             >
-              <Menu size={20} />
+              <Menu size={18} />
             </button>
           </div>
         </div>

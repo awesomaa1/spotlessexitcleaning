@@ -28,36 +28,36 @@ export default function Process({ onQuote }: { onQuote: () => void }) {
       className={`bg-white ${sectionY}`}
     >
       <div className={container}>
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+        <div className="flex flex-col gap-6 sm:gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-[760px]">
             <Eyebrow>How it works</Eyebrow>
-            <h2 id="process-title" className={`${h2} mt-6 text-ink`}>
+            <h2 id="process-title" className={`${h2} mt-4 sm:mt-6 text-ink`}>
               A simple booking process.
             </h2>
           </div>
-          <p className="ff-geist max-w-[420px] text-[18px] leading-[1.6] text-muted">
+          <p className="ff-geist max-w-[420px] text-[16px] sm:text-[18px] leading-[1.6] text-muted">
             Three steps from first enquiry to a freshly cleaned space. Most
             people are done in a couple of minutes.
           </p>
         </div>
 
-        <ol className="mt-[clamp(48px,5vw,88px)] grid gap-0 md:grid-cols-3 md:gap-8">
+        <ol className="mt-[clamp(36px,5vw,88px)] grid gap-0 md:grid-cols-3 md:gap-8">
           {steps.map((s, i) => {
             const last = i === steps.length - 1
             return (
               <li
                 key={s.title}
-                className="relative grid grid-cols-[56px_1fr] gap-x-5 pb-10 md:block md:pb-0"
+                className="relative grid grid-cols-[48px_1fr] sm:grid-cols-[56px_1fr] gap-x-3.5 sm:gap-x-5 pb-8 sm:pb-10 md:block md:pb-0"
               >
                 {/* Connector: vertical on mobile, horizontal on desktop */}
                 {!last && (
                   <span
                     aria-hidden
-                    className="absolute bottom-0 left-[27.5px] top-[56px] w-px bg-teal/15 md:hidden"
+                    className="absolute bottom-0 left-[23.5px] sm:left-[27.5px] top-[48px] sm:top-[56px] w-px bg-teal/15 md:hidden"
                   />
                 )}
                 <div className="flex items-center md:mb-8">
-                  <span className="ff-geist-medium relative z-10 flex size-14 shrink-0 items-center justify-center rounded-full bg-sand text-[18px] text-teal ring-1 ring-teal/10">
+                  <span className="ff-geist-medium relative z-10 flex size-12 sm:size-14 shrink-0 items-center justify-center rounded-full bg-sand text-[16px] sm:text-[18px] text-teal ring-1 ring-teal/10">
                     0{i + 1}
                   </span>
                   {!last && (
@@ -67,14 +67,14 @@ export default function Process({ onQuote }: { onQuote: () => void }) {
                     />
                   )}
                 </div>
-                <div className="pt-3 md:pt-0">
-                  <p className="ff-geist-semibold text-[12px] uppercase tracking-[0.14em] text-teal-text">
+                <div className="pt-2 sm:pt-3 md:pt-0">
+                  <p className="ff-geist-semibold text-[11px] sm:text-[12px] uppercase tracking-[0.14em] text-teal-text">
                     {s.meta}
                   </p>
-                  <h3 className="ff-geist-medium mt-3 text-[clamp(22px,1.7vw,28px)] leading-[1.2] text-ink">
+                  <h3 className="ff-geist-medium mt-2 sm:mt-3 text-[clamp(19px,1.7vw,28px)] leading-[1.25] sm:leading-[1.2] text-ink">
                     {s.title}
                   </h3>
-                  <p className="ff-geist mt-3 max-w-[380px] text-[16px] leading-[1.6] text-muted">
+                  <p className="ff-geist mt-2 sm:mt-3 max-w-[380px] text-[15px] sm:text-[16px] leading-[1.6] text-muted">
                     {s.body}
                   </p>
                 </div>
@@ -83,8 +83,8 @@ export default function Process({ onQuote }: { onQuote: () => void }) {
           })}
         </ol>
 
-        <div className="mt-[clamp(40px,4.5vw,72px)] flex flex-col gap-5 border-t border-teal/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <p className="ff-geist text-[16px] text-muted">
+        <div className="mt-[clamp(36px,4.5vw,72px)] flex flex-col gap-4 sm:gap-5 border-t border-teal/10 pt-6 sm:pt-8 sm:flex-row sm:items-center sm:justify-between">
+          <p className="ff-geist text-[15px] sm:text-[16px] text-muted">
             Prefer to talk it through?{" "}
             <a
               href={PHONE_HREF}
@@ -99,7 +99,7 @@ export default function Process({ onQuote }: { onQuote: () => void }) {
             variant="ink"
             arrow
             onClick={onQuote}
-            className="self-start sm:self-auto"
+            className="w-full sm:w-auto text-center justify-center"
           >
             Get a Quick Quote
           </Button>

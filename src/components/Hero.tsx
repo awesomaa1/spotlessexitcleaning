@@ -72,7 +72,7 @@ export function MobileMenu({
       role="dialog"
       aria-modal="true"
       aria-label="Menu"
-      className="fixed inset-0 z-[60] flex flex-col bg-ink p-5 text-white"
+      className="fixed inset-0 z-[60] flex flex-col bg-ink p-5 sm:p-8 pt-[max(1.25rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))] text-white"
     >
       <div className="flex items-center justify-between">
         <Logo />
@@ -80,13 +80,13 @@ export function MobileMenu({
           type="button"
           onClick={onClose}
           aria-label="Close menu"
-          className="flex size-[44px] items-center justify-center rounded-full bg-white/10"
+          className="flex size-[40px] sm:size-[44px] items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-white/20"
           autoFocus
         >
-          <Close size={22} />
+          <Close size={20} />
         </button>
       </div>
-      <nav aria-label="Mobile" className="mt-12 flex-1 overflow-y-auto">
+      <nav aria-label="Mobile" className="mt-8 sm:mt-12 flex-1 overflow-y-auto">
         <ul className="flex flex-col">
           {navLinks.map((l) => {
             const current = l.href === `#${active}`
@@ -96,7 +96,7 @@ export function MobileMenu({
                   href={l.href}
                   onClick={onClose}
                   aria-current={current ? "true" : undefined}
-                  className={`ff-geist flex items-center justify-between py-4 text-[28px] leading-tight transition-colors ${
+                  className={`ff-geist flex items-center justify-between py-3.5 sm:py-4 text-[clamp(22px,5.5vw,32px)] leading-tight transition-colors ${
                     current ? "text-turquoise-glow" : "text-white"
                   }`}
                 >
@@ -113,7 +113,7 @@ export function MobileMenu({
           })}
         </ul>
       </nav>
-      <div className="flex flex-col gap-3 pt-6">
+      <div className="flex flex-col gap-3 pt-4 sm:pt-6">
         <Button
           as="button"
           type="button"
@@ -148,7 +148,7 @@ export default function Hero({
       aria-label="Introduction"
       className="bg-white p-2 sm:p-[16px]"
     >
-      <div className="relative flex h-[calc(100svh-16px)] max-h-[1100px] min-h-[640px] flex-col overflow-clip rounded-[28px] sm:h-[calc(100svh-32px)] sm:rounded-[39px]">
+      <div className="relative flex h-[calc(100svh-16px)] max-h-[1100px] min-h-[560px] sm:min-h-[640px] flex-col overflow-clip rounded-[24px] sm:h-[calc(100svh-32px)] sm:rounded-[39px]">
         {/* Background: photo with 47% black scrim, as in the hero frame */}
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div className="absolute inset-0 bg-[#841b1b]" />
@@ -170,7 +170,7 @@ export default function Hero({
           className="right-[2.5%] min-[1440px]:right-[4.5%] bottom-[10%] min-[1440px]:bottom-[12%]"
         />
 
-        <header className="relative z-20 flex w-full items-center justify-between px-[clamp(20px,5vw,96.585px)] py-[clamp(18px,2vw,38.634px)]">
+        <header className="relative z-20 flex w-full items-center justify-between px-4 py-3 sm:px-6 sm:py-5 lg:px-[clamp(20px,5vw,96.585px)] lg:py-[clamp(18px,2vw,38.634px)]">
           <Logo />
 
           <nav aria-label="Primary" className="hidden lg:block">
@@ -194,19 +194,19 @@ export default function Hero({
             </ul>
           </nav>
 
-          <div className="flex items-center gap-[clamp(10px,1vw,18.667px)]">
+          <div className="flex items-center gap-2 sm:gap-[clamp(10px,1vw,18.667px)]">
             <a
               href={PHONE_HREF}
               className="group flex items-center gap-[12.444px]"
               aria-label={`Call ${PHONE_DISPLAY}`}
             >
-              <span className="flex size-[clamp(40px,2.28vw,43.556px)] items-center justify-center rounded-full bg-turquoise transition-transform group-hover:scale-105">
+              <span className="flex size-[38px] sm:size-[clamp(40px,2.28vw,43.556px)] items-center justify-center rounded-full bg-turquoise transition-transform group-hover:scale-105">
                 <img
                   src={assets.phoneIcon}
                   alt=""
                   width={21.7778}
                   height={21.7778}
-                  className="block size-[21.778px]"
+                  className="block size-[18px] sm:size-[21.778px]"
                 />
               </span>
               <span className="ff-geist-semibold hidden whitespace-nowrap text-[clamp(16px,1.14vw,21.778px)] leading-[31.111px] text-white xl:inline">
@@ -225,33 +225,33 @@ export default function Hero({
               onClick={() => setMenuOpen(true)}
               aria-label="Open menu"
               aria-expanded={menuOpen}
-              className="flex size-[44px] items-center justify-center rounded-full bg-white/[0.14] backdrop-blur-xl border border-white/30 text-white shadow-[0_4px_16px_rgba(0,0,0,0.18)] hover:bg-white/[0.25] hover:border-white/50 transition-all duration-200 lg:hidden"
+              className="flex size-[38px] sm:size-[44px] items-center justify-center rounded-full bg-white/[0.14] backdrop-blur-xl border border-white/30 text-white shadow-[0_4px_16px_rgba(0,0,0,0.18)] hover:bg-white/[0.25] hover:border-white/50 transition-all duration-200 lg:hidden"
             >
-              <Menu size={22} />
+              <Menu size={20} />
             </button>
           </div>
         </header>
 
-        <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 pb-10 text-center">
-          <div className="flex flex-col items-center gap-[clamp(20px,1.7vw,32px)] capitalize text-headline">
-            <h1 className="ff-script text-[clamp(44px,6vw,80px)] leading-[1.02] md:whitespace-nowrap md:leading-[0.92]">
+        <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 sm:px-6 pb-8 sm:pb-12 text-center">
+          <div className="flex flex-col items-center gap-[clamp(16px,1.7vw,32px)] capitalize text-headline">
+            <h1 className="ff-script text-[clamp(32px,7.5vw,80px)] leading-[1.08] sm:leading-[1.02] md:whitespace-nowrap md:leading-[0.92]">
               <span className="ff-inter">A </span>
               <span>Spotless </span>
               <span className="ff-geist">Space, Every Time.</span>
             </h1>
-            <p className="ff-geist max-w-[680px] text-[clamp(17px,1.4vw,24px)] leading-[normal]">
+            <p className="ff-geist max-w-[660px] text-[clamp(15px,3.8vw,24px)] leading-relaxed sm:leading-[normal] text-headline/90">
               Professional cleaning and specialised linen &amp; fabric care for
               homes, Airbnb properties and end-of-lease cleans.
             </p>
           </div>
-          <div className="mt-[clamp(24px,2.4vw,40px)] flex flex-col items-stretch gap-[16px] min-[420px]:flex-row min-[420px]:items-center">
+          <div className="mt-[clamp(20px,2.4vw,40px)] flex w-full max-w-[340px] flex-col items-stretch gap-3 min-[440px]:w-auto min-[440px]:max-w-none min-[440px]:flex-row min-[440px]:items-center min-[440px]:gap-4">
             <Button as="button" type="button" onClick={onQuote} arrow>
               Get Quick Quote
             </Button>
             <Button
               href="#services"
               variant="secondary"
-              className="h-[52.8px] flex-none gap-[16px] rounded-[65px] px-[24px] py-[12px] min-[420px]:w-[205px]"
+              className="h-[52.8px] w-full min-[440px]:w-[205px] flex-none gap-[16px] rounded-[65px] px-[24px] py-[12px]"
             >
               Explore Services
             </Button>

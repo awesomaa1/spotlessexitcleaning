@@ -435,47 +435,47 @@ function EstimatePanel({
 
   return (
     <div
-      className="mt-6 overflow-hidden rounded-[20px] border border-turquoise/20 bg-gradient-to-br from-teal/[0.06] to-turquoise/[0.04] p-5 transition-all duration-300 sm:p-6"
+      className="mt-6 overflow-hidden rounded-[18px] sm:rounded-[20px] border border-turquoise/20 bg-gradient-to-br from-teal/[0.06] to-turquoise/[0.04] p-4 sm:p-6 transition-all duration-300"
       role="region"
       aria-label="Price estimate"
       aria-live="polite"
     >
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex items-start justify-between gap-3 sm:gap-4">
         <div>
-          <p className="ff-geist-medium text-[13px] uppercase tracking-wider text-teal/70">
+          <p className="ff-geist-medium text-[12px] sm:text-[13px] uppercase tracking-wider text-teal/70">
             Estimated price
           </p>
           {hasEstimate ? (
-            <p className="ff-geist mt-1 text-[clamp(28px,3vw,36px)] font-bold leading-none text-teal">
+            <p className="ff-geist mt-1 text-[clamp(24px,3vw,36px)] font-bold leading-none text-teal">
               ${estimate!.min}
               <span className="text-[0.65em] text-teal/60"> – ${estimate!.max}</span>
-              <span className="ff-geist ml-2 text-[14px] font-normal text-muted">
+              <span className="ff-geist ml-1.5 sm:ml-2 text-[13px] sm:text-[14px] font-normal text-muted">
                 AUD
               </span>
             </p>
           ) : (
-            <p className="ff-geist mt-1 text-[18px] italic text-muted">
+            <p className="ff-geist mt-1 text-[16px] sm:text-[18px] italic text-muted">
               Fill in details above to see your estimate
             </p>
           )}
           {showDiscount && hasEstimate && (
-            <p className="ff-geist mt-2 flex items-center gap-1.5 text-[13px] text-teal">
-              <span className="flex size-4 items-center justify-center rounded-full bg-teal text-white">
+            <p className="ff-geist mt-2 flex items-center gap-1.5 text-[12px] sm:text-[13px] text-teal">
+              <span className="flex size-4 shrink-0 items-center justify-center rounded-full bg-teal text-white">
                 <Check size={10} />
               </span>
               {discountLabel[frequency]}
             </p>
           )}
         </div>
-        <div className="shrink-0 rounded-[12px] bg-turquoise-bright/10 p-2.5">
+        <div className="shrink-0 rounded-[12px] bg-turquoise-bright/10 p-2 sm:p-2.5">
           <svg
-            width="22"
-            height="22"
+            width="20"
+            height="20"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             strokeWidth="1.6"
-            className="text-teal"
+            className="text-teal sm:h-[22px] sm:w-[22px]"
           >
             <circle cx="12" cy="12" r="10" />
             <path d="M12 8v4m0 4h.01" />
@@ -483,22 +483,22 @@ function EstimatePanel({
         </div>
       </div>
 
-      <p className="ff-geist mt-4 text-[12px] leading-[1.5] text-muted">
+      <p className="ff-geist mt-3 sm:mt-4 text-[11px] sm:text-[12px] leading-[1.5] text-muted">
         * Prices are estimates only and may vary depending on property size,
         condition, and additional requirements. A final quote will be confirmed
         after review.
       </p>
 
       {hasEstimate && (
-        <div className="mt-4 grid grid-cols-3 gap-2 border-t border-teal/10 pt-4 text-center">
+        <div className="mt-4 grid grid-cols-3 gap-1.5 sm:gap-2 border-t border-teal/10 pt-3 sm:pt-4 text-center">
           {[
             { icon: "✓", label: "No obligation" },
             { icon: "⟳", label: "Free revision" },
             { icon: "★", label: "Satisfaction guarantee" },
           ].map(({ icon, label }) => (
-            <div key={label} className="rounded-[10px] bg-white/60 px-1 py-2">
-              <span className="block text-[16px]">{icon}</span>
-              <span className="ff-geist mt-0.5 block text-[11px] leading-tight text-muted">
+            <div key={label} className="rounded-[10px] bg-white/70 px-1 py-1.5 sm:py-2">
+              <span className="block text-[14px] sm:text-[16px]">{icon}</span>
+              <span className="ff-geist mt-0.5 block text-[10px] sm:text-[11px] leading-tight text-muted">
                 {label}
               </span>
             </div>
@@ -537,25 +537,25 @@ function BookingStep({
     <div className="space-y-8">
       {/* Estimate summary card */}
       {estimate && (
-        <div className="rounded-[20px] bg-teal p-5 text-white sm:p-6">
-          <p className="ff-geist text-[13px] text-white/65">Your quote for</p>
-          <p className="ff-geist-semibold mt-0.5 text-[18px]">
+        <div className="rounded-[18px] sm:rounded-[20px] bg-teal p-4 sm:p-6 text-white">
+          <p className="ff-geist text-[12px] sm:text-[13px] text-white/65">Your quote for</p>
+          <p className="ff-geist-semibold mt-0.5 text-[16px] sm:text-[18px]">
             {selected?.name}
           </p>
-          <div className="mt-4">
-            <p className="ff-geist text-[12px] uppercase tracking-wider text-white/60">
+          <div className="mt-3 sm:mt-4">
+            <p className="ff-geist text-[11px] sm:text-[12px] uppercase tracking-wider text-white/60">
               Estimated price
             </p>
-            <p className="ff-geist-semibold mt-1 text-[32px] leading-none text-turquoise-bright">
+            <p className="ff-geist-semibold mt-1 text-[26px] sm:text-[32px] leading-none text-turquoise-bright">
               ${estimate.min}
               <span className="text-[0.6em] text-white/50">
                 {" "}– ${estimate.max}
               </span>
-              <span className="ff-geist ml-2 text-[14px] font-normal text-white/50">
+              <span className="ff-geist ml-1.5 sm:ml-2 text-[13px] sm:text-[14px] font-normal text-white/50">
                 AUD
               </span>
             </p>
-            <p className="ff-geist mt-1 text-[12px] text-white/50">
+            <p className="ff-geist mt-1 text-[11px] sm:text-[12px] text-white/50">
               Prices may vary by property condition
             </p>
             {f.additionalServices.length > 0 && (
@@ -576,12 +576,12 @@ function BookingStep({
               </div>
             )}
           </div>
-          <div className="mt-4 flex flex-wrap gap-2">
+          <div className="mt-4 flex flex-wrap gap-1.5 sm:gap-2">
             {["No hidden fees", "Free cancellation (24hrs)", "Insured cleaners"].map(
               (t) => (
                 <span
                   key={t}
-                  className="ff-geist flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[12px] text-white/80"
+                  className="ff-geist flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 sm:px-3 py-1 text-[11px] sm:text-[12px] text-white/80"
                 >
                   <Check size={11} />
                   {t}
@@ -594,7 +594,7 @@ function BookingStep({
 
       <GroupHeading index="04" title="Book your clean" />
 
-      <div className="space-y-6">
+      <div className="space-y-5 sm:space-y-6">
         <div data-field="name">
           <Field label="Full name" required error={errors.name} htmlFor={fid("name")}>
             <input
@@ -629,7 +629,7 @@ function BookingStep({
           </Field>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
           <div data-field="email">
             <Field label="Email" required error={errors.email} htmlFor={fid("email")}>
               <input
@@ -665,7 +665,7 @@ function BookingStep({
           label="Preferred date"
           hint="Optional – we'll confirm availability"
           htmlFor={fid("preferredDate")}
-          className="sm:max-w-[320px]"
+          className="w-full sm:max-w-[320px]"
         >
           <input
             id={fid("preferredDate")}
@@ -703,11 +703,11 @@ function BookingStep({
         </Field>
       </div>
 
-      <div className="flex flex-col gap-4 border-t border-teal/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between border-t border-teal/10 pt-6">
         <button
           type="button"
           onClick={onBack}
-          className="ff-geist flex items-center gap-2 text-[14px] text-muted transition-colors hover:text-ink"
+          className="ff-geist flex min-h-[44px] items-center justify-center gap-2 text-[14px] text-muted transition-colors hover:text-ink sm:justify-start"
         >
           <svg
             width="16"
@@ -726,7 +726,7 @@ function BookingStep({
           type="submit"
           arrow
           disabled={status === "sending"}
-          className="sm:min-w-[220px]"
+          className="w-full sm:w-auto sm:min-w-[220px]"
         >
           {status === "sending" ? "Booking…" : "Confirm Booking Request"}
         </Button>
@@ -961,7 +961,7 @@ export default function QuoteForm({
               <Eyebrow tone="dark">Quick quote</Eyebrow>
               <h2
                 id="quote-title"
-                className="ff-geist mt-6 text-[clamp(36px,3.8vw,64px)] leading-[1.04] tracking-[-0.02em] text-headline"
+                className="ff-geist mt-4 sm:mt-6 text-[clamp(28px,3.8vw,64px)] leading-[1.06] sm:leading-[1.04] tracking-[-0.02em] text-headline"
               >
                 {step === "booking" ? (
                   <>
@@ -975,14 +975,14 @@ export default function QuoteForm({
                   </>
                 )}
               </h2>
-              <p className="ff-geist mt-6 max-w-[420px] text-[18px] leading-[1.6] text-white/75">
+              <p className="ff-geist mt-4 sm:mt-6 max-w-[420px] text-[16px] sm:text-[18px] leading-[1.6] text-white/75">
                 {step === "booking"
                   ? "Confirm your details and we'll lock in your clean right away."
                   : "A few details are all we need to prepare a tailored quote for your property."}
               </p>
 
               {step === "quote" && (
-                <ul className="mt-10 space-y-4">
+                <ul className="mt-8 sm:mt-10 space-y-3 sm:space-y-4">
                   {[
                     "No obligation to book",
                     "Priced for your property and service",
@@ -990,10 +990,10 @@ export default function QuoteForm({
                   ].map((t) => (
                     <li
                       key={t}
-                      className="ff-geist flex items-center gap-3 text-[16px] text-white/90"
+                      className="ff-geist flex items-center gap-3 text-[15px] sm:text-[16px] text-white/90"
                     >
-                      <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-turquoise-bright/15 text-turquoise-bright">
-                        <Check size={16} />
+                      <span className="flex size-6 sm:size-7 shrink-0 items-center justify-center rounded-full bg-turquoise-bright/15 text-turquoise-bright">
+                        <Check size={15} />
                       </span>
                       {t}
                     </li>
@@ -1002,7 +1002,7 @@ export default function QuoteForm({
               )}
 
               {/* Step indicator */}
-              <div className="mt-10 flex items-center gap-1">
+              <div className="mt-8 sm:mt-10 flex items-center gap-1">
                 {(["Get estimate", "Book clean"] as const).map((label, i) => {
                   const active =
                     (i === 0 && step === "quote") ||
@@ -1011,7 +1011,7 @@ export default function QuoteForm({
                   return (
                     <div key={label} className="flex items-center gap-2">
                       <span
-                        className={`flex size-7 shrink-0 items-center justify-center rounded-full text-[12px] font-bold transition-colors ${
+                        className={`flex size-6 sm:size-7 shrink-0 items-center justify-center rounded-full text-[11px] sm:text-[12px] font-bold transition-colors ${
                           done
                             ? "bg-turquoise-bright text-teal"
                             : active
@@ -1019,30 +1019,30 @@ export default function QuoteForm({
                               : "bg-white/15 text-white/40"
                         }`}
                       >
-                        {done ? <Check size={14} /> : i + 1}
+                        {done ? <Check size={13} /> : i + 1}
                       </span>
                       <span
-                        className={`ff-geist text-[13px] ${
+                        className={`ff-geist text-[12px] sm:text-[13px] ${
                           active || done ? "text-white" : "text-white/40"
                         }`}
                       >
                         {label}
                       </span>
                       {i < 1 && (
-                        <span className="mx-2 text-white/25">→</span>
+                        <span className="mx-1.5 sm:mx-2 text-white/25">→</span>
                       )}
                     </div>
                   )
                 })}
               </div>
 
-              <div className="mt-10 rounded-[24px] bg-white/[0.06] p-6 ring-1 ring-white/10">
-                <p className="ff-geist text-[14px] text-white/65">
+              <div className="mt-8 sm:mt-10 rounded-[20px] sm:rounded-[24px] bg-white/[0.06] p-4 sm:p-6 ring-1 ring-white/10">
+                <p className="ff-geist text-[13px] sm:text-[14px] text-white/65">
                   Prefer to talk?
                 </p>
                 <a
                   href={PHONE_HREF}
-                  className="ff-geist-semibold mt-1 block text-[24px] leading-tight text-white hover:text-turquoise-bright"
+                  className="ff-geist-semibold mt-1 block text-[20px] sm:text-[24px] leading-tight text-white hover:text-turquoise-bright"
                 >
                   {PHONE_DISPLAY}
                 </a>
@@ -1052,7 +1052,7 @@ export default function QuoteForm({
 
           {/* ── Form card ── */}
           <div className="lg:col-span-8">
-            <div className="rounded-[24px] bg-white p-5 text-ink shadow-[0_30px_80px_-30px_rgba(0,0,0,0.45)] sm:rounded-[32px] sm:p-8 lg:p-12">
+            <div className="rounded-[20px] sm:rounded-[32px] bg-white p-4 sm:p-8 lg:p-12 text-ink shadow-[0_30px_80px_-30px_rgba(0,0,0,0.45)]">
               {status === "sent" ? (
                 <div
                   ref={successRef}
@@ -1063,10 +1063,10 @@ export default function QuoteForm({
                   <span className="mx-auto flex size-16 items-center justify-center rounded-full bg-turquoise-bright text-teal">
                     <Check size={30} />
                   </span>
-                  <h3 className="ff-geist mt-8 text-[clamp(28px,2.6vw,40px)] leading-tight text-ink">
+                  <h3 className="ff-geist mt-8 text-[clamp(26px,2.6vw,40px)] leading-tight text-ink">
                     Booking confirmed, {f.name.trim().split(" ")[0]}!
                   </h3>
-                  <p className="ff-geist mx-auto mt-4 max-w-[460px] text-[17px] leading-[1.6] text-muted">
+                  <p className="ff-geist mx-auto mt-4 max-w-[460px] text-[16px] sm:text-[17px] leading-[1.6] text-muted">
                     Your{" "}
                     <span className="ff-geist-semibold text-ink">
                       {selected?.name}
@@ -1080,15 +1080,15 @@ export default function QuoteForm({
                       <p className="ff-geist text-[13px] text-muted">
                         Your estimated price
                       </p>
-                      <p className="ff-geist-semibold mt-1 text-[28px] text-teal">
+                      <p className="ff-geist-semibold mt-1 text-[26px] sm:text-[28px] text-teal">
                         ${estimate.min} – ${estimate.max}
-                        <span className="ff-geist ml-1 text-[14px] font-normal text-muted">
+                        <span className="ff-geist ml-1 text-[13px] sm:text-[14px] font-normal text-muted">
                           AUD
                         </span>
                       </p>
                     </div>
                   )}
-                  <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                  <div className="mt-8 sm:mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
                     <Button
                       as="button"
                       type="button"
@@ -1107,7 +1107,7 @@ export default function QuoteForm({
                   ref={formRef}
                   onSubmit={onSubmit}
                   noValidate
-                  className="space-y-12"
+                  className="space-y-10 sm:space-y-12"
                 >
                   {step === "quote" ? (
                     <>
@@ -1124,7 +1124,7 @@ export default function QuoteForm({
                           <legend className="sr-only">
                             Which service do you need?
                           </legend>
-                          <div className="grid gap-3 sm:grid-cols-2">
+                          <div className="grid gap-2.5 sm:gap-3 sm:grid-cols-2">
                             {services.map((s) => (
                               <label
                                 key={s.id}
@@ -1138,26 +1138,26 @@ export default function QuoteForm({
                                   onChange={() => onServiceChange(s.id)}
                                   className="peer sr-only"
                                 />
-                                <span className="flex min-h-[84px] items-center gap-4 rounded-[18px] border border-teal/15 p-4 pr-12 transition-colors hover:border-teal/35 peer-checked:border-turquoise peer-checked:bg-turquoise/10 peer-checked:ring-1 peer-checked:ring-turquoise peer-focus-visible:ring-4 peer-focus-visible:ring-turquoise/30">
+                                <span className="flex min-h-[72px] sm:min-h-[84px] items-center gap-3 sm:gap-4 rounded-[16px] sm:rounded-[18px] border border-teal/15 p-3 sm:p-4 pr-10 sm:pr-12 transition-colors hover:border-teal/35 peer-checked:border-turquoise peer-checked:bg-turquoise/10 peer-checked:ring-1 peer-checked:ring-turquoise peer-focus-visible:ring-4 peer-focus-visible:ring-turquoise/30">
                                   <img
                                     src={s.image}
                                     alt=""
-                                    className="size-12 shrink-0 rounded-[12px] object-cover"
+                                    className="size-10 sm:size-12 shrink-0 rounded-[10px] sm:rounded-[12px] object-cover"
                                   />
                                   <span>
-                                    <span className="ff-geist-semibold block text-[16px] text-ink">
+                                    <span className="ff-geist-semibold block text-[15px] sm:text-[16px] text-ink">
                                       {s.name}
                                     </span>
-                                    <span className="ff-geist block text-[13px] text-muted">
+                                    <span className="ff-geist block text-[12px] sm:text-[13px] text-muted">
                                       {s.audience}
                                     </span>
                                   </span>
                                 </span>
                                 <span
                                   aria-hidden
-                                  className="absolute right-4 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center rounded-full border border-teal/20 text-transparent transition-colors peer-checked:border-teal peer-checked:bg-teal peer-checked:text-white"
+                                  className="absolute right-3.5 sm:right-4 top-1/2 flex size-5 sm:size-6 -translate-y-1/2 items-center justify-center rounded-full border border-teal/20 text-transparent transition-colors peer-checked:border-teal peer-checked:bg-teal peer-checked:text-white"
                                 >
-                                  <Check size={14} />
+                                  <Check size={13} />
                                 </span>
                               </label>
                             ))}
@@ -1175,7 +1175,7 @@ export default function QuoteForm({
                         {/* Service-specific questions */}
                         {service && (
                           <div
-                            className="mt-6 space-y-6 rounded-[20px] bg-sand/70 p-5 sm:p-6"
+                            className="mt-6 space-y-6 rounded-[18px] sm:rounded-[20px] bg-sand/70 p-4 sm:p-6"
                             aria-live="polite"
                           >
                             {service === "house" && (
@@ -1195,7 +1195,7 @@ export default function QuoteForm({
 
                             {service === "airbnb" && (
                               <>
-                                <div className="grid gap-5 sm:grid-cols-2">
+                                <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
                                   <Field
                                     label="Number of listings"
                                     htmlFor={fid("listings")}
@@ -1238,7 +1238,7 @@ export default function QuoteForm({
                                     }
                                     className="size-5 accent-[#123f4a]"
                                   />
-                                  <span className="ff-geist text-[15px] text-ink">
+                                  <span className="ff-geist text-[14px] sm:text-[15px] text-ink">
                                     Include linen laundering between stays
                                   </span>
                                 </label>
@@ -1263,7 +1263,7 @@ export default function QuoteForm({
                                     error={errors.linenItems}
                                   />
                                 </div>
-                                <div className="grid gap-5 sm:grid-cols-2">
+                                <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
                                   <Field
                                     label="Approximate volume"
                                     htmlFor={fid("linenVolume")}
@@ -1304,7 +1304,7 @@ export default function QuoteForm({
                                 label="Move-out or inspection date"
                                 hint="Optional"
                                 htmlFor={fid("moveOut")}
-                                className="sm:max-w-[320px]"
+                                className="w-full sm:max-w-[320px]"
                               >
                                 <input
                                   id={fid("moveOut")}
@@ -1343,7 +1343,7 @@ export default function QuoteForm({
                                 value={f.propertyType}
                                 onChange={(v) => set("propertyType", v)}
                               />
-                              <div className="grid grid-cols-2 gap-5">
+                              <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-3.5 sm:gap-5">
                                 <Field
                                   label="Bedrooms"
                                   htmlFor={fid("bedrooms")}
@@ -1432,7 +1432,7 @@ export default function QuoteForm({
                             />
 
                             {f.additionalServices.length > 0 && (
-                              <div className="mt-3 rounded-[14px] bg-sand/80 p-4 text-[13px]">
+                              <div className="mt-3 rounded-[14px] bg-sand/80 p-3.5 sm:p-4 text-[13px]">
                                 <p className="ff-geist-medium mb-2 text-ink">
                                   Selected add-ons:
                                 </p>
@@ -1478,7 +1478,7 @@ export default function QuoteForm({
                       </div>
 
                       {/* Proceed CTA */}
-                      <div className="flex flex-col gap-5 border-t border-teal/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="flex flex-col gap-4 border-t border-teal/10 pt-6 sm:pt-8 sm:flex-row sm:items-center sm:justify-between">
                         <p className="ff-geist max-w-[360px] text-[13px] leading-[1.55] text-muted">
                           Happy with your estimate? Proceed to confirm your booking.
                         </p>
@@ -1486,7 +1486,7 @@ export default function QuoteForm({
                           as="button"
                           type="submit"
                           arrow
-                          className="sm:min-w-[240px]"
+                          className="w-full sm:w-auto sm:min-w-[240px]"
                         >
                           Proceed to Booking →
                         </Button>

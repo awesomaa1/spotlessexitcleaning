@@ -95,6 +95,13 @@
   font-family: "Inter:Regular", ui-sans-serif, system-ui, sans-serif;
   font-weight: 400;
 }
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
 
 @layer base {
   html {

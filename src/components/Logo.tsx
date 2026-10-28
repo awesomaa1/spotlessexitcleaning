@@ -1,8 +1,8 @@
 import { assets } from "../data/content"
 
 const sizes = {
-  default: "[--s:0.74] md:[--s:0.86] 2xl:[--s:1]",
-  compact: "[--s:0.62] md:[--s:0.7]",
+  default: "[--s:0.64] min-[360px]:[--s:0.72] md:[--s:0.86] 2xl:[--s:1]",
+  compact: "[--s:0.52] min-[360px]:[--s:0.6] md:[--s:0.7]",
 }
 
 /** Hero lockup: wordmark SVG, "exit cleaning" caption and flanking rules, scaled as one unit. */
