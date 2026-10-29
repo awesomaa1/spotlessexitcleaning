@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
   PHONE_DISPLAY,
   PHONE_HREF,
@@ -10,36 +10,217 @@ import Button, { Stars } from "./Button"
 import { Close, Menu } from "./Icons"
 import Logo from "./Logo"
 
+// Inject all keyframes once
+const glassKeyframes = `
+  @keyframes floatA {
+    0%,100% { transform: translateY(0px) rotate(0deg); }
+    33%      { transform: translateY(-10px) rotate(-0.4deg); }
+    66%      { transform: translateY(-5px) rotate(0.3deg); }
+  }
+  @keyframes floatB {
+    0%,100% { transform: translateY(0px) rotate(0deg); }
+    33%      { transform: translateY(-7px) rotate(0.35deg); }
+    66%      { transform: translateY(-13px) rotate(-0.3deg); }
+  }
+  @keyframes shimmerSweep {
+    0%   { transform: translateX(-130%) skewX(-15deg); opacity: 0; }
+    20%  { opacity: 1; }
+    100% { transform: translateX(230%) skewX(-15deg); opacity: 0; }
+  }
+  @keyframes sparkPop {
+    0%   { transform: scale(0) rotate(-30deg); opacity: 0; }
+    55%  { transform: scale(1.3) rotate(10deg); opacity: 1; }
+    100% { transform: scale(0) rotate(20deg); opacity: 0; }
+  }
+`
+if (typeof document !== "undefined" && !document.getElementById("glass-review-keyframes")) {
+  const s = document.createElement("style")
+  s.id = "glass-review-keyframes"
+  s.textContent = glassKeyframes
+  document.head.appendChild(s)
+}
+
+// Sparkle dots that burst on hover-enter and fade out
+function Sparkles({ active }: { active: boolean }) {
+  if (!active) return null
+  const dots = [
+    { top: "10%",  left: "74%", delay: "0ms",   size: 5 },
+    { top: "20%",  left: "92%", delay: "55ms",  size: 4 },
+    { top: "72%",  left: "84%", delay: "110ms", size: 6 },
+    { top: "78%",  left: "14%", delay: "35ms",  size: 4 },
+    { top: "8%",   left: "28%", delay: "85ms",  size: 3 },
+    { top: "50%",  left: "96%", delay: "140ms", size: 3 },
+  ]
+  return (
+    <>
+      {dots.map((d, i) => (
+        <span
+          key={i}
+          aria-hidden
+          style={{
+            position: "absolute",
+            top: d.top,
+            left: d.left,
+            width: d.size,
+            height: d.size,
+            borderRadius: "50%",
+            background: "rgba(72,209,204,0.95)",
+            boxShadow: "0 0 8px 3px rgba(72,209,204,0.65)",
+            animation: `sparkPop 0.55s ${d.delay} cubic-bezier(0.22,1,0.36,1) forwards`,
+            pointerEvents: "none",
+            zIndex: 30,
+          }}
+        />
+      ))}
+    </>
+  )
+}
+
 function GlassReview({
   reviewIndex = 0,
   className,
+  floatAnim = "floatA",
 }: {
   reviewIndex?: number
   className: string
+  floatAnim?: "floatA" | "floatB"
 }) {
   const r = reviews[reviewIndex] ?? reviews[0]
+  const cardRef = useRef<HTMLElement>(null)
+  const [tilt, setTilt]       = useState({ x: 0, y: 0 })
+  const [magnet, setMagnet]   = useState({ x: 0, y: 0 })
+  const [spot, setSpot]       = useState({ x: 50, y: 50 })
+  const [hovered, setHovered] = useState(false)
+  const [shimmer, setShimmer] = useState(false)
+  const [sparks, setSparks]   = useState(false)
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const el = cardRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const cx = rect.left + rect.width / 2
+    const cy = rect.top  + rect.height / 2
+    const dx = (e.clientX - cx) / (rect.width  / 2)  // -1..1
+    const dy = (e.clientY - cy) / (rect.height / 2)  // -1..1
+    setTilt({ x: dy * 7, y: dx * -7 })               // 3-D tilt
+    setMagnet({ x: dx * 11, y: dy * 11 })            // magnetic drift
+    setSpot({
+      x: ((e.clientX - rect.left) / rect.width)  * 100,
+      y: ((e.clientY - rect.top)  / rect.height) * 100,
+    })
+  }
+
+  const handleMouseEnter = () => {
+    setHovered(true)
+    // One-shot shimmer + sparkles
+    setShimmer(true);  setTimeout(() => setShimmer(false), 580)
+    setSparks(true);   setTimeout(() => setSparks(false), 600)
+  }
+
+  const handleMouseLeave = () => {
+    setHovered(false)
+    setTilt({ x: 0, y: 0 })
+    setMagnet({ x: 0, y: 0 })
+    setSpot({ x: 50, y: 50 })
+  }
+
+  const cardStyle: React.CSSProperties = {
+    animation: `${floatAnim} ${floatAnim === "floatA" ? "5.4s" : "6.8s"} ease-in-out infinite`,
+    animationPlayState: hovered ? "paused" : "running",
+    transform: hovered
+      ? `perspective(700px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translate(${magnet.x}px, ${magnet.y}px) scale(1.05)`
+      : undefined,
+    transition: hovered
+      ? "transform 0.1s cubic-bezier(0.23,1,0.32,1)"
+      : "transform 0.8s cubic-bezier(0.23,1,0.32,1)",
+    willChange: "transform",
+  }
+
   return (
     <figure
-      className={`group absolute z-10 hidden items-center gap-[16px] rounded-[32px] bg-white/[0.12] bg-gradient-to-br from-white/[0.22] via-white/[0.10] to-white/[0.04] backdrop-blur-xl backdrop-saturate-150 border border-white/30 px-[20px] py-[12px] shadow-[inset_0_1px_1px_rgba(255,255,255,0.45),0_12px_36px_rgba(0,0,0,0.28)] transition-all duration-300 ease-out hover:-translate-y-1 hover:bg-white/[0.2] hover:border-white/50 hover:shadow-[inset_0_1px_2px_rgba(255,255,255,0.65),0_18px_44px_rgba(0,0,0,0.36)] min-[1180px]:flex ${className}`}
+      ref={cardRef}
+      style={cardStyle}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className={`absolute z-10 hidden items-center gap-[16px] rounded-[32px] overflow-hidden
+        bg-white/[0.12] bg-gradient-to-br from-white/[0.22] via-white/[0.10] to-white/[0.04]
+        backdrop-blur-xl backdrop-saturate-150 border px-[20px] py-[12px]
+        min-[1180px]:flex cursor-default select-none
+        ${hovered
+          ? "border-white/50 shadow-[inset_0_1px_2px_rgba(255,255,255,0.7),0_28px_60px_rgba(0,0,0,0.5),0_0_44px_rgba(72,209,204,0.26)]"
+          : "border-white/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.45),0_12px_36px_rgba(0,0,0,0.28)]"
+        } ${className}`}
     >
-      <span className="size-[42px] shrink-0 overflow-clip rounded-full bg-[#99a1af] ring-2 ring-white/40 shadow-md transition-transform duration-300 group-hover:scale-105">
+      {/* Aurora spotlight that follows cursor */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute", inset: 0, borderRadius: "inherit",
+          pointerEvents: "none",
+          opacity: hovered ? 1 : 0,
+          transition: "opacity 0.4s ease",
+          background: `radial-gradient(circle 130px at ${spot.x}% ${spot.y}%, rgba(72,209,204,0.28) 0%, rgba(255,255,255,0.08) 55%, transparent 80%)`,
+        }}
+      />
+
+      {/* One-shot shimmer sweep on enter */}
+      {shimmer && (
+        <div
+          aria-hidden
+          style={{
+            position: "absolute", inset: 0, borderRadius: "inherit",
+            pointerEvents: "none",
+            background: "linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.24) 50%, transparent 70%)",
+            animation: "shimmerSweep 0.55s ease forwards",
+          }}
+        />
+      )}
+
+      {/* Sparkle burst on enter */}
+      <Sparkles active={sparks} />
+
+      {/* Avatar */}
+      <span
+        className={`relative size-[42px] shrink-0 overflow-clip rounded-full bg-[#99a1af] shadow-md
+          transition-all duration-500
+          ${hovered
+            ? "ring-[3px] ring-turquoise/75 scale-110 shadow-[0_0_16px_rgba(72,209,204,0.6)]"
+            : "ring-2 ring-white/40"
+          }`}
+      >
         <img src={r.avatar} alt="" className="size-full object-cover" />
       </span>
-      <div className="flex w-[310px] flex-col">
+
+      {/* Text content */}
+      <div className="flex w-[310px] flex-col relative z-10">
         <div className="flex items-center justify-between">
           <Stars count={r.rating} size={14} />
-          <span className="ff-geist-medium text-[10px] tracking-wider uppercase text-turquoise-glow bg-white/10 px-2 py-0.5 rounded-full border border-white/20">
+          <span
+            className={`ff-geist-medium text-[10px] tracking-wider uppercase px-2 py-0.5 rounded-full border
+              transition-all duration-300
+              ${hovered
+                ? "text-turquoise bg-turquoise/20 border-turquoise/50 scale-105"
+                : "text-turquoise-glow bg-white/10 border-white/20"
+              }`}
+          >
             Verified Client
           </span>
         </div>
-        <blockquote className="ff-geist pt-[6px] text-[12px] leading-[17px] text-white/95">
+        <blockquote
+          className={`ff-geist pt-[6px] text-[12px] leading-[17px] transition-colors duration-300
+            ${hovered ? "text-white" : "text-white/90"}`}
+        >
           "{r.quote}"
         </blockquote>
         <figcaption className="pt-[6px] flex items-center justify-between">
           <span className="ff-geist-bold text-[12px] leading-[16px] text-white">
             {r.name}
           </span>
-          <span className="ff-geist text-[12px] leading-[16px] text-turquoise-glow">
+          <span
+            className={`ff-geist text-[12px] leading-[16px] transition-all duration-300
+              ${hovered ? "text-turquoise translate-x-[3px]" : "text-turquoise-glow"}`}
+          >
             {r.location}
           </span>
         </figcaption>
@@ -163,10 +344,12 @@ export default function Hero({
 
         <GlassReview
           reviewIndex={0}
+          floatAnim="floatA"
           className="left-[2.5%] min-[1440px]:left-[4.5%] top-[18%] min-[1440px]:top-[20%]"
         />
         <GlassReview
           reviewIndex={1}
+          floatAnim="floatB"
           className="right-[2.5%] min-[1440px]:right-[4.5%] bottom-[10%] min-[1440px]:bottom-[12%]"
         />
 
