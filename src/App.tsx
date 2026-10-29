@@ -6,6 +6,7 @@ import Hero from "./components/Hero"
 import Process from "./components/Process"
 import QuoteForm from "./components/QuoteForm"
 import Reviews from "./components/Reviews"
+import SeoHead from "./components/SeoHead"
 import Services from "./components/Services"
 import StickyNav from "./components/StickyNav"
 import { sectionIds, type ServiceId } from "./data/content"
@@ -26,6 +27,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SeoHead />
       <a
         href="#quote"
         className="ff-geist-semibold sr-only z-[70] rounded-full bg-turquoise-bright px-5 py-3 text-teal focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
