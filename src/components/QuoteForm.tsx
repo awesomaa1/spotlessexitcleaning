@@ -932,6 +932,15 @@ export default function QuoteForm({
 
     ])
 
+    // Meta Pixel conversion tracking
+    if (typeof window !== "undefined" && typeof window.fbq === "function") {
+      window.fbq("track", "Lead", {
+        content_name: selectedService?.name ?? service ?? "Cleaning Service",
+        currency: "AUD",
+        value: estimate?.min ?? 0,
+      })
+    }
+
     setStatus("sent")
   }
 
