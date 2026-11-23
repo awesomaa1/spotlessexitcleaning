@@ -1,11 +1,12 @@
 import {
+  GOOGLE_REVIEW_URL,
   PHONE_DISPLAY,
   PHONE_HREF,
   navLinks,
   services,
   type ServiceId,
 } from "../data/content"
-import { Pin } from "./Icons"
+import { ArrowUpRight, Pin } from "./Icons"
 import Logo from "./Logo"
 import { panel, panelInner, panelWrap } from "./layout"
 
@@ -69,6 +70,17 @@ export default function Footer({
                     </a>
                   </li>
                 ))}
+                <li>
+                  <a
+                    href={GOOGLE_REVIEW_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`${link} inline-flex items-center gap-1.5 text-turquoise-glow hover:text-white`}
+                  >
+                    <span>Write a Review</span>
+                    <ArrowUpRight size={13} />
+                  </a>
+                </li>
               </ul>
             </nav>
 

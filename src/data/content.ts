@@ -1,5 +1,6 @@
 export const PHONE_DISPLAY = "+61413 034 344"
 export const PHONE_HREF = "tel:+61413034344"
+export const GOOGLE_REVIEW_URL = "https://g.page/r/CWQZAZjvad-nEAE/review"
 
 export const assets = {
   heroPhoto: "/assets/ac95f.png",
@@ -95,26 +96,31 @@ export type Review = {
   quote: string
   name: string
   location: string
-  avatar: string
+  avatar?: string
   rating: number
 }
 
-/* Only client-supplied reviews belong here (this one is sourced from the hero design). */
+/* Client reviews — live 5-star Google Reviews */
 export const reviews: Review[] = [
   {
     quote:
-      "I could cry with relief at finally finding people good at their job. It all looks fantastic and I'm so thrilled with the quality.",
-    name: "Blair Purvis",
+      "Fantastic experience with Spotless Exit Cleaning. Really happy with the quality of their work and attention to detail. Highly recommend their services to anyone looking for reliable and professional cleaning!",
+    name: "Don Hettiarachchi",
     location: "Melbourne",
-    avatar: assets.reviewerBlair,
     rating: 5,
   },
   {
     quote:
-      "Every corner was immaculate. Spotless has been our trusted team for our Airbnb turnovers—flawless service and attention to detail every single time.",
-    name: "Marcus & Elena Vance",
-    location: "South Yarra, Melbourne",
-    avatar: assets.reviewerBlair,
+      "Really happy with Spotless Exit Cleaning! They did a fantastic job with the house cleaning, including carpet steam cleaning. Everything was spotless and completed to a very high standard.",
+    name: "Advaid Sharma",
+    location: "Melbourne",
+    rating: 5,
+  },
+  {
+    quote:
+      "A big thank you to the Spotless Cleaning Team! They did such a wonderful job cleaning my house and paid attention to every detail.",
+    name: "Kamal Kaur",
+    location: "Melbourne",
     rating: 5,
   },
 ]

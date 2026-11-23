@@ -1,7 +1,8 @@
 import { useState } from "react"
-import { reviews } from "../data/content"
+import { GOOGLE_REVIEW_URL, reviews } from "../data/content"
+import Avatar from "./Avatar"
 import { Eyebrow, Stars } from "./Button"
-import { ChevronLeft, ChevronRight } from "./Icons"
+import { ArrowUpRight, ChevronLeft, ChevronRight, GoogleIcon } from "./Icons"
 import { container, sectionY } from "./layout"
 
 export default function Reviews() {
@@ -29,6 +30,30 @@ export default function Reviews() {
           <p className="ff-geist mt-3 sm:mt-4 max-w-[300px] text-[15px] sm:text-[16px] leading-[1.6] text-muted">
             Feedback shared with us by Spotless clients across Melbourne.
           </p>
+
+          {/* Google Review Button & Rating badge */}
+          <div className="mt-6 sm:mt-7 flex flex-col items-start gap-2.5">
+            <a
+              href={GOOGLE_REVIEW_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group ff-geist-semibold inline-flex items-center gap-2.5 rounded-full border border-teal/20 bg-sand/60 px-4 py-2.5 text-[14px] text-teal shadow-xs transition-all duration-200 hover:border-teal/40 hover:bg-sand hover:shadow-sm hover:-translate-y-0.5 active:translate-y-0"
+            >
+              <GoogleIcon className="size-4 shrink-0" />
+              <span>Write a Review</span>
+              <ArrowUpRight
+                size={14}
+                className="text-teal/60 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
+            </a>
+            <div className="flex items-center gap-2 text-[12px] sm:text-[13px] text-muted">
+              <span className="flex text-[#f59e0b] tracking-wider" aria-hidden="true">
+                ★★★★★
+              </span>
+              <span className="font-semibold text-ink">5.0</span>
+              <span>on Google</span>
+            </div>
+          </div>
           {multiple && (
             <div className="hidden lg:flex mt-8 items-center gap-2">
               <button
@@ -69,9 +94,12 @@ export default function Reviews() {
           </blockquote>
           <figcaption className="mt-8 sm:mt-10 flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
             <span className="flex items-center gap-3.5 sm:gap-4">
-              <span className="size-12 sm:size-14 shrink-0 overflow-clip rounded-full bg-[#99a1af]">
-                <img src={r.avatar} alt="" className="size-full object-cover" />
-              </span>
+              <Avatar
+                src={r.avatar}
+                name={r.name}
+                className="size-12 sm:size-14 ring-1 ring-teal/20"
+                textClassName="text-[17px] sm:text-[19px]"
+              />
               <span>
                 <span className="ff-geist-semibold block text-[16px] sm:text-[17px] text-ink">
                   {r.name}

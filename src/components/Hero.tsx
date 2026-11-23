@@ -7,7 +7,8 @@ import {
   reviews,
 } from "../data/content"
 import Button, { Stars } from "./Button"
-import { Close, Menu } from "./Icons"
+import Avatar from "./Avatar"
+import { Close, GoogleIcon, Menu } from "./Icons"
 import Logo from "./Logo"
 
 // Inject all keyframes once
@@ -180,31 +181,32 @@ function GlassReview({
       {/* Sparkle burst on enter */}
       <Sparkles active={sparks} />
 
-      {/* Avatar */}
-      <span
-        className={`relative size-[42px] shrink-0 overflow-clip rounded-full bg-[#99a1af] shadow-md
-          transition-all duration-500
-          ${hovered
+      {/* Avatar (real pic or initials) */}
+      <Avatar
+        src={r.avatar}
+        name={r.name}
+        className={`size-[42px] shrink-0 shadow-md transition-all duration-500 ${
+          hovered
             ? "ring-[3px] ring-turquoise/75 scale-110 shadow-[0_0_16px_rgba(72,209,204,0.6)]"
             : "ring-2 ring-white/40"
-          }`}
-      >
-        <img src={r.avatar} alt="" className="size-full object-cover" />
-      </span>
+        }`}
+        textClassName="text-[14px]"
+      />
 
       {/* Text content */}
       <div className="flex w-[310px] flex-col relative z-10">
         <div className="flex items-center justify-between">
           <Stars count={r.rating} size={14} />
           <span
-            className={`ff-geist-medium text-[10px] tracking-wider uppercase px-2 py-0.5 rounded-full border
+            className={`ff-geist-medium text-[10px] tracking-wider uppercase px-2 py-0.5 rounded-full border inline-flex items-center gap-1.5
               transition-all duration-300
               ${hovered
                 ? "text-turquoise bg-turquoise/20 border-turquoise/50 scale-105"
                 : "text-turquoise-glow bg-white/10 border-white/20"
               }`}
           >
-            Verified Client
+            <GoogleIcon className="size-2.5 shrink-0" />
+            <span>Google Review</span>
           </span>
         </div>
         <blockquote
